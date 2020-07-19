@@ -45,7 +45,26 @@ class App extends React.Component {
     });
   };
 
+  changeFilterType = (filterType) => {
+    this.setState({
+      activeFilter: filterType,
+    });
+  };
+
   render() {
+    const todoList = this.state.todoList;
+    const activeFilter = this.state.activeFilter;
+
+    const filteredTodoList = todoList.filter((element) => {
+      if (activeFilter === "INACTIVE") {
+        return !element.isFinished;
+      } else if (activeFilter === "ACTIVE") {
+        return element.isFinished;
+      } else if (activeFilter === "ALL") {
+        return true;
+      }
+    });
+
     return (
       <div>
         <Input
@@ -54,10 +73,10 @@ class App extends React.Component {
           onKeyPressed={this.handleKeyPressed}
         />
         <ListTodo
-          listToRender={this.state.todoList}
+          listToRender={filteredTodoList}
           onToggleItem={this.handleToggleDone}
         />
-        <FilterTodo />
+        <FilterTodo onChangeFilter={this.changeFilterType} />
       </div>
     );
   }
