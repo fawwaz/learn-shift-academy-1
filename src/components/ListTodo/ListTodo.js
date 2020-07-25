@@ -13,6 +13,8 @@ class ListTodo extends React.Component {
               text={element.todoText}
               onToggleTodo={this.props.onToggleItem}
               isFinishedTodo={element.isFinished}
+              onDeleteTodo={this.props.onTodoDelete}
+              element={element}
               indexTodo={index}
             />
           );

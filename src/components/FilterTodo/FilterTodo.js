@@ -1,7 +1,9 @@
 import React from "react";
+import style from "./FilterTodo.module.css";
 
 class FilterTodo extends React.Component {
   render() {
+    const currentFilter = this.props.currentFilter;
     return (
       <div>
         <button onClick={() => this.props.onChangeFilter("ALL")}>All</button>
