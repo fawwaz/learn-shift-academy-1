@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import ItemTodo from "../ItemTodo/ItemTodo";
 
 class ListTodo extends React.Component {
@@ -7,21 +8,17 @@ class ListTodo extends React.Component {
     return (
       <ul>
         {listToRender.map((element, index) => {
-          return (
-            <ItemTodo
-              key={index}
-              text={element.todoText}
-              onToggleTodo={this.props.onToggleItem}
-              isFinishedTodo={element.isFinished}
-              onDeleteTodo={this.props.onTodoDelete}
-              element={element}
-              indexTodo={index}
-            />
-          );
+          return <ItemTodo key={index} element={element} />;
         })}
       </ul>
     );
   }
 }
 
-export default ListTodo;
+const mapStateToProps = (reduxState) => {
+  return {
+    listToRender: reduxState.todoList,
+  };
+};
+
+export default connect(mapStateToProps, null)(ListTodo);

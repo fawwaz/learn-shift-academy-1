@@ -13,3 +13,7 @@ export function tambahDataKeserver(newTodo) {
 export function updateDataDiServer(id, newTodo) {
   return axios.put(URL + `/${id}`, newTodo);
 }
+
+export function deleteDataDiServer(id) {
+  return axios.delete(URL + `/${id}`);
+}

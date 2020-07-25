@@ -1,4 +1,7 @@
 import React, { useState, useCallback } from "react";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import reducer, { initialState } from "./reducers/TodoReducer";
 import Input from "./components/Input/Input";
 import ListTodo from "./components/ListTodo/ListTodo";
 import FilterTodo from "./components/FilterTodo/FilterTodo";
@@ -6,7 +9,10 @@ import {
   ambilDataDariServer,
   tambahDataKeserver,
   updateDataDiServer,
+  deleteDataDiServer,
 } from "./services/TodoService";
+
+const store = createStore(reducer, initialState);
 
 class App extends React.Component {
   constructor(props) {
@@ -66,35 +72,13 @@ class App extends React.Component {
     }
   };
 
-  handleToggleDone = (index) => {
-    const currentTodoList = this.state.todoList;
-    const todoItem = currentTodoList[index];
-
-    // Ubah value di server
-    // Destructure
-    const { id, isFinished, todoText } = todoItem;
-    updateDataDiServer(id, {
-      isDone: !isFinished,
-      text: todoText,
-    });
-
-    // Ubah value di local browser
-    currentTodoList[index].isFinished = !isFinished;
-
-    this.setState({
-      todoList: currentTodoList,
-    });
-  };
-
   changeFilterType = (filterType) => {
     this.setState({
       activeFilter: filterType,
     });
   };
 
-  handleDeleteTodo = (element) => {
-    console.log(element);
-  };
+  // TAMBAH INI :
 
   render() {
     const todoList = this.state.todoList;
@@ -111,22 +95,18 @@ class App extends React.Component {
     });
 
     return (
-      <>
+      <Provider store={store}>
         <Input
           val={this.state.inputText}
           onInputChanged={this.handleInputChange}
           onKeyPressed={this.handleKeyPressed}
         />
-        <ListTodo
-          onTodoDelete={this.handleDeleteTodo}
-          listToRender={filteredTodoList}
-          onToggleItem={this.handleToggleDone}
-        />
+        <ListTodo />
         <FilterTodo
           onChangeFilter={this.changeFilterType}
           currentFilter={this.state.activeFilter}
         />
-      </>
+      </Provider>
     );
   }
 }

@@ -1,23 +1,31 @@
 import React from "react";
+import { connect } from "react-redux";
 
 class ItemTodo extends React.Component {
   render() {
-    const { onToggleTodo, onDeleteTodo, indexTodo, element } = this.props;
+    const { onToggleTodo, onDeleteTodo, element } = this.props;
 
     return (
       <li>
-        <button onClick={() => onToggleTodo(indexTodo)}>
+        <button onClick={() => onToggleTodo(element.id)}>
           I've Done doing this !
         </button>
-        <button onClick={() => onDeleteTodo(element)}>Delete</button>
-        {this.props.isFinishedTodo ? (
-          <u>{this.props.text}</u>
+        <button onClick={() => onDeleteTodo(element.id)}>Delete</button>
+        {element.isFinished ? (
+          <u>{element.todoText}</u>
         ) : (
-          <i>{this.props.text}</i>
+          <i>{element.todoText}</i>
         )}
       </li>
     );
   }
 }
 
-export default ItemTodo;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onDeleteTodo: (id) => dispatch({ type: "DELETE_TODO", payload: id }),
+    onToggleTodo: (id) => dispatch({ type: "UPDATE_TODO", idTodo: id }),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(ItemTodo);
